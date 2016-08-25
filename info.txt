@@ -1,0 +1,29 @@
+ctrl + alt + cmd + links	1/3 links
+ctrl + alt + cmd + rechts	1/3 rechts
+ctrl + alt + cmd + unten	1/3 mitte
+ctrl + alt + cmd + oben		Vollbild
+
+ctrl + alt + cmd + space	Zentrieren
+ctrl + alt + cmd + 4		Spezialgröße (80%, 140px von links)
+
+alt + cmd + links			1/2 links
+alt + cmd + rechts			1/2 rechts
+alt + cmd + unten			1/2 unten
+alt + cmd + oben			1/2 oben
+
+alt + cmd + i				1/4 links oben
+alt + cmd + o				1/4 rechts oben
+alt + cmd + k				1/4 links unten
+alt + cmd + l				1/4 rechts oben
+
+ctrl + cmd	+ Pfeile		Fenster resizen
+
+ctrl + alt + Pfeile 		Fenster begwegen
+shift + alt + ctrl + Pfeile	Fenster begwegen
+
+Hyper + Pfeile 				Fokus
+
+Hyper + i					Info
+
+ctrl + cmd + a				Keep Afloat
+
