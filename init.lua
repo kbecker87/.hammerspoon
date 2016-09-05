@@ -1,5 +1,5 @@
 -----------------------------------------------
--- Hammerspoon Karl 12.8.16
+-- Hammerspoon Karl 3.9.16
 -----------------------------------------------
 hs.window.animationDuration = 0
 -- Damit Fokus funktioniert: (?!?)
@@ -39,7 +39,7 @@ hs.grid.HINTS = {
 ----------------------------------------------
 local hyper = {"cmd", "alt", "ctrl", "shift"}
 local move = {"alt", "ctrl"}
-local size = {"ctrl", "cmd"}
+-- local size = {"ctrl", "cmd"}
 local push = {"alt", "cmd"}
 local mash = {"cmd", "alt", "ctrl"}
 -- hide window shadows
@@ -48,6 +48,7 @@ hs.window.setShadows(false)
 
 -- Show Grid
 hs.hotkey.bind(mash, 'g',     function() hs.grid.toggleShow() end)
+hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
 -- Snap single window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
 -- Snap all windows to grid
@@ -56,10 +57,8 @@ hs.hotkey.bind(mash, '.',     function() fnutils.map(window.visibleWindows(), gr
 -- --------------------------------------------------------
 
 -- --------------------------------------------------------
--- Helper functions - these do all the heavy lifting below.
+-- Helper function to resize
 -- --------------------------------------------------------
-
-
 
 -- Resize a window by moving the bottom
 function yank(xpixels,ypixels)
@@ -74,11 +73,13 @@ end
 ----------------------------------------------
 -- Movement hotkeys
 
-hs.hotkey.bind(move, 'down', function() grid.pushWindowDown() end) 	--down
-hs.hotkey.bind(move, "up", function() grid.pushWindowUp() end)	--up
-hs.hotkey.bind(move, "right", function() grid.pushWindowRight() end)	--right
-hs.hotkey.bind(move, "left", function() grid.pushWindowLeft() end)	--left
+-- Im Grid
+-- hs.hotkey.bind(move, 'down', function() grid.pushWindowDown() end)   --down
+-- hs.hotkey.bind(move, "up", function() grid.pushWindowUp() end) --up
+-- hs.hotkey.bind(move, "right", function() grid.pushWindowRight() end) --right
+-- hs.hotkey.bind(move, "left", function() grid.pushWindowLeft() end) --left
 
+-- Um jeweils 100px
 -- hs.hotkey.bind(move, 'down', function() nudge(0,100) end)   --down
 -- hs.hotkey.bind(move, "up", function() nudge(0,-100) end)  --up
 -- hs.hotkey.bind(move, "right", function() nudge(100,0) end)  --right
@@ -86,6 +87,7 @@ hs.hotkey.bind(move, "left", function() grid.pushWindowLeft() end)	--left
 
 -- Resize hotkeys
 
+-- Um jeweils 100px
 -- hs.hotkey.bind(size, "up", function() yank(0,-100) end) -- yank bottom up
 -- hs.hotkey.bind(size, "down", function() yank(0,100) end) -- yank bottom down
 -- hs.hotkey.bind(size, "right", function() yank(100,0) end) -- yank right side right
@@ -94,7 +96,7 @@ hs.hotkey.bind(move, "left", function() grid.pushWindowLeft() end)	--left
 ---------------------------------------
 -- Left
 
-hs.hotkey.bind({"cmd", "alt"}, "Left", function()
+hs.hotkey.bind({"ctrl", "alt"}, "Left", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -107,24 +109,9 @@ hs.hotkey.bind({"cmd", "alt"}, "Left", function()
     win:setFrame(f)
 end)
 
--- 1/3 Left
-
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Left", function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
-
-    f.x = max.x
-    f.y = max.y
-    f.w = max.w / 3
-    f.h = max.h
-    win:setFrame(f)
-end)
-
 -- Top
 
-hs.hotkey.bind({"cmd", "alt"}, "Up", function()
+hs.hotkey.bind({"ctrl", "alt"}, "Up", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -139,7 +126,7 @@ end)
 
 -- Bottom
 
-hs.hotkey.bind({"cmd", "alt"}, "Down", function()
+hs.hotkey.bind({"ctrl", "alt"}, "Down", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -154,7 +141,7 @@ end)
 
 -- Right
 
-hs.hotkey.bind({"cmd", "alt"}, "Right", function()
+hs.hotkey.bind({"ctrl", "alt"}, "Right", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -166,9 +153,38 @@ hs.hotkey.bind({"cmd", "alt"}, "Right", function()
     f.h = max.h
     win:setFrame(f)
 end)
------------------------------------------------
+
+-- 1/3 Left
+
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "Left", function()
+    local win = hs.window.focusedWindow()
+    local f = win:frame()
+    local screen = win:screen()
+    local max = screen:frame()
+
+    f.x = 0
+    f.y = max.y
+    f.w = (max.w / 3) * 2
+    f.h = max.h
+    win:setFrame(f)
+end)
+
+-- 2/3 Right
+
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "right", function()
+    local win = hs.window.focusedWindow()
+    local f = win:frame()
+    local screen = win:screen()
+    local max = screen:frame()
+
+    f.x = (max.w / 3) * 2
+    f.y = max.y
+    f.w = max.w / 3
+    f.h = max.h
+    win:setFrame(f)
+end)
+
 -- Fullscreen
------------------------------------------------
 
 hs.hotkey.bind({"ctrl", "alt", "cmd"}, "Up", function()
     local win = hs.window.focusedWindow()
@@ -244,32 +260,6 @@ hs.hotkey.bind(hyper, "i", function()
     hs.hints.windowHints()
 end)
 
---		saved.win 		The window last moved.
---		saved.winframe The frame for the window before moving.
-
-saved = {}
-saved.win = {}
-saved.winframe = {}
-
--- Description:      Move the current window to the right 1/3rd of the screen.
-
-function zweidrittel()
-   saved.win = hs.window.focusedWindow()
-   saved.winframe = saved.win:frame()
-	hs.grid.set(saved.win, {x = 0, y = 0, w = 4, h = 5}, hs.screen.mainScreen())
-end
-
-hs.hotkey.bind({"ctrl", "alt", "cmd"},"Left", zweidrittel)
-
--- Description:      Move the current window to the left 2/3rds of the screen.
-
-function eindrittel()
-   saved.win = hs.window.focusedWindow()
-   saved.winframe = saved.win:frame()
-	hs.grid.set(hs.window.focusedWindow(), {x = 4, y = 0, w = 2, h = 5}, hs.screen.mainScreen())
-end
-
-hs.hotkey.bind({"ctrl", "alt", "cmd"},"Right", eindrittel)
 ----------------------------------------------
 -- change focusWindowWest
 
