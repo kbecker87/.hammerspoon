@@ -38,14 +38,21 @@ hs.grid.HINTS = {
 -- Modifier shortcuts
 ----------------------------------------------
 local hyper = {"cmd", "alt", "ctrl", "shift"}
-local move = {"alt", "ctrl"}
--- local size = {"ctrl", "cmd"}
-local push = {"alt", "cmd"}
 local mash = {"cmd", "alt", "ctrl"}
+local push = {"ctrl", "alt"}
+local tile = {"cmd", "alt"}
 -- hide window shadows
 hs.window.setShadows(false)
 ----------------------------------------------
-
+hs.hotkey.bind(push, 'left', hs.grid.pushWindowLeft)
+hs.hotkey.bind(push, 'down', hs.grid.pushWindowDown)
+hs.hotkey.bind(push, 'up', hs.grid.pushWindowUp)
+hs.hotkey.bind(push, 'right', hs.grid.pushWindowRight)
+-- resize windows
+hs.hotkey.bind(push, '.', hs.grid.resizeWindowThinner)
+hs.hotkey.bind(push, '-', hs.grid.resizeWindowShorter)
+hs.hotkey.bind(push, 'ä', hs.grid.resizeWindowTaller)
+hs.hotkey.bind(push, 'ö', hs.grid.resizeWindowWider)
 -- Show Grid
 hs.hotkey.bind(mash, 'g',     function() hs.grid.toggleShow() end)
 hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
@@ -54,49 +61,10 @@ hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
 -- Snap all windows to grid
 hs.hotkey.bind(mash, '.',     function() fnutils.map(window.visibleWindows(), grid.snap) end)
 
--- --------------------------------------------------------
-
--- --------------------------------------------------------
--- Helper function to resize
--- --------------------------------------------------------
-
--- Resize a window by moving the bottom
-function yank(xpixels,ypixels)
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-
-	f.w = f.w + xpixels
-	f.h = f.h + ypixels
-	win:setFrame(f)
-end
-
-----------------------------------------------
--- Movement hotkeys
-
--- Im Grid
--- hs.hotkey.bind(move, 'down', function() grid.pushWindowDown() end)   --down
--- hs.hotkey.bind(move, "up", function() grid.pushWindowUp() end) --up
--- hs.hotkey.bind(move, "right", function() grid.pushWindowRight() end) --right
--- hs.hotkey.bind(move, "left", function() grid.pushWindowLeft() end) --left
-
--- Um jeweils 100px
--- hs.hotkey.bind(move, 'down', function() nudge(0,100) end)   --down
--- hs.hotkey.bind(move, "up", function() nudge(0,-100) end)  --up
--- hs.hotkey.bind(move, "right", function() nudge(100,0) end)  --right
--- hs.hotkey.bind(move, "left", function() nudge(-100,0) end)  --left
-
--- Resize hotkeys
-
--- Um jeweils 100px
--- hs.hotkey.bind(size, "up", function() yank(0,-100) end) -- yank bottom up
--- hs.hotkey.bind(size, "down", function() yank(0,100) end) -- yank bottom down
--- hs.hotkey.bind(size, "right", function() yank(100,0) end) -- yank right side right
--- hs.hotkey.bind(size, "left", function() yank(-100,0) end) -- yank right side left
-
 ---------------------------------------
 -- Left
 
-hs.hotkey.bind({"ctrl", "alt"}, "Left", function()
+hs.hotkey.bind(tile, "Left", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -111,7 +79,7 @@ end)
 
 -- Top
 
-hs.hotkey.bind({"ctrl", "alt"}, "Up", function()
+hs.hotkey.bind(tile, "Up", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -126,7 +94,7 @@ end)
 
 -- Bottom
 
-hs.hotkey.bind({"ctrl", "alt"}, "Down", function()
+hs.hotkey.bind(tile, "Down", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -141,7 +109,7 @@ end)
 
 -- Right
 
-hs.hotkey.bind({"ctrl", "alt"}, "Right", function()
+hs.hotkey.bind(tile, "Right", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -256,7 +224,7 @@ hotkey.bind(mash, "x", function() tiling.cycle(-1) end)
 -- Hyper i to show window hints
 -----------------------------------------------
 
-hs.hotkey.bind(hyper, "i", function()
+hs.hotkey.bind(mash, ".", function()
     hs.hints.windowHints()
 end)
 
@@ -269,10 +237,10 @@ hs.hotkey.bind(hyper, 'Up', function() hs.window.focusedWindow():focusWindowNort
 hs.hotkey.bind(hyper, 'Down', function() hs.window.focusedWindow():focusWindowSouth() end)
 
 ----------------------------------------------
--- Launch or Focus Safari & Canary (Mail)
+-- Launch or Focus Safari & Canary (Mail) -> Macht Karabiner jetzt (und besser!)
 
-hs.hotkey.bind(mash, "b", function() hs.application.launchOrFocus("Safari") end)
-hs.hotkey.bind(mash, "m", function() hs.application.launchOrFocus("Canary") end)
+-- hs.hotkey.bind(mash, "b", function() hs.application.launchOrFocus("Safari") end)
+-- hs.hotkey.bind(mash, "m", function() hs.application.launchOrFocus("Canary") end)
 
 -----------------------------------------------
 -- Reload config on write
