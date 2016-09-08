@@ -41,18 +41,19 @@ local hyper = {"cmd", "alt", "ctrl", "shift"}
 local mash = {"cmd", "alt", "ctrl"}
 local push = {"ctrl", "alt"}
 local tile = {"cmd", "alt"}
+local test = {"cmd", "escape"}
 -- hide window shadows
 hs.window.setShadows(false)
 ----------------------------------------------
 hs.hotkey.bind(push, 'left', hs.grid.pushWindowLeft)
-hs.hotkey.bind(push, 'down', hs.grid.pushWindowDown)
-hs.hotkey.bind(push, 'up', hs.grid.pushWindowUp)
 hs.hotkey.bind(push, 'right', hs.grid.pushWindowRight)
+hs.hotkey.bind(push, 'up', hs.grid.pushWindowUp)
+hs.hotkey.bind(push, 'down', hs.grid.pushWindowDown)
 -- resize windows
-hs.hotkey.bind(push, '.', hs.grid.resizeWindowThinner)
-hs.hotkey.bind(push, '-', hs.grid.resizeWindowShorter)
-hs.hotkey.bind(push, 'ä', hs.grid.resizeWindowTaller)
-hs.hotkey.bind(push, 'ö', hs.grid.resizeWindowWider)
+hs.hotkey.bind(test, 'up', hs.grid.resizeWindowShorter) -- nach oben
+hs.hotkey.bind(test, 'down', hs.grid.resizeWindowTaller) -- nach unten
+hs.hotkey.bind(test, 'left', hs.grid.resizeWindowThinner) -- nach links 
+hs.hotkey.bind(test, 'right', hs.grid.resizeWindowWider) -- nach rechts
 -- Show Grid
 hs.hotkey.bind(mash, 'g',     function() hs.grid.toggleShow() end)
 hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
