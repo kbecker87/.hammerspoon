@@ -49,17 +49,15 @@ hs.hotkey.bind(move, 'right', hs.grid.pushWindowRight)
 hs.hotkey.bind(move, 'up', hs.grid.pushWindowUp)
 hs.hotkey.bind(move, 'down', hs.grid.pushWindowDown)
 -- resize windows
-hs.hotkey.bind(hyper, 'up', hs.grid.resizeWindowShorter) -- nach oben
-hs.hotkey.bind(hyper, 'down', hs.grid.resizeWindowTaller) -- nach unten
-hs.hotkey.bind(hyper, 'left', hs.grid.resizeWindowThinner) -- nach links 
-hs.hotkey.bind(hyper, 'right', hs.grid.resizeWindowWider) -- nach rechts
+hs.hotkey.bind(tile, 'up', hs.grid.resizeWindowShorter) -- nach oben
+hs.hotkey.bind(tile, 'down', hs.grid.resizeWindowTaller) -- nach unten
+hs.hotkey.bind(tile, 'left', hs.grid.resizeWindowThinner) -- nach links 
+hs.hotkey.bind(tile, 'right', hs.grid.resizeWindowWider) -- nach rechts
 -- Show Grid
 hs.hotkey.bind(mash, 'g',     function() hs.grid.toggleShow() end)
 hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
--- Snap single window to grid
+-- Snap focused window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
--- Snap all windows to grid
-hs.hotkey.bind(hyper, ',',     function() fnutils.map(window.visibleWindows(), grid.snap) end)
 
 ---------------------------------------
 -- Window Tiles: mash + U,D (Right, Left, Up, Down)
@@ -232,10 +230,10 @@ end)
 ----------------------------------------------
 -- change focusWindowWest
 
-hs.hotkey.bind(tile, 'Left', function() hs.window.focusedWindow():focusWindowWest() end)
-hs.hotkey.bind(tile, 'Right', function() hs.window.focusedWindow():focusWindowEast() end)
-hs.hotkey.bind(tile, 'Up', function() hs.window.focusedWindow():focusWindowNorth() end)
-hs.hotkey.bind(tile, 'Down', function() hs.window.focusedWindow():focusWindowSouth() end)
+hs.hotkey.bind(hyper, 'Left', function() hs.window.focusedWindow():focusWindowWest() end)
+hs.hotkey.bind(hyper, 'Right', function() hs.window.focusedWindow():focusWindowEast() end)
+hs.hotkey.bind(hyper, 'Up', function() hs.window.focusedWindow():focusWindowNorth() end)
+hs.hotkey.bind(hyper, 'Down', function() hs.window.focusedWindow():focusWindowSouth() end)
 
 -----------------------------------------------
 -- Reload config on write
