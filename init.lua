@@ -235,6 +235,9 @@ hs.hotkey.bind(hyper, 'Right', function() hs.window.focusedWindow():focusWindowE
 hs.hotkey.bind(hyper, 'Up', function() hs.window.focusedWindow():focusWindowNorth() end)
 hs.hotkey.bind(hyper, 'Down', function() hs.window.focusedWindow():focusWindowSouth() end)
 
+----------------------------------------------
+-- Hammerspoon Expose
+
 hs.expose.ui.showTitles = false
 hs.expose.ui.backgroundColor = {0,0,0,0.5}
 hs.expose.ui.nonVisibleStripBackgroundColor = {0,0,0,0.5}
@@ -244,6 +247,7 @@ hs.expose.ui.closeModeBackgroundColor = {0.7,0.1,0.1,0.5}
 hs.expose.ui.minimizeModeBackgroundColor = {0.1,0.2,0.3,0.5}
 hs.expose.ui.otherSpacesStripWidth = 0.1
 hs.expose.ui.nonVisibleStripWidth = 0.05
+hs.expose.ui.closeModeModifier = 'ctrl'
 -- set up your instance(s)
 expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no thumbnails
 expose_2 = hs.expose.new(nil,{includeOtherSpaces=false, includeNonVisible=false}) -- show windows for the current application
