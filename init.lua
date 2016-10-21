@@ -123,7 +123,7 @@ end)
 
 -- 1/3 Left
 
-hs.hotkey.bind(hyper, "1", function()
+hs.hotkey.bind(hyper, "Q", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -138,7 +138,7 @@ end)
 
 -- 2/3 Right
 
-hs.hotkey.bind(hyper, "2", function()
+hs.hotkey.bind(hyper, "W", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
