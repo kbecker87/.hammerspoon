@@ -5,6 +5,7 @@ hs.window.animationDuration = 0
 -- Damit Fokus funktioniert: (?!?)
 require 'action'
 require 'profile'
+require 'cheatsheets'
 local application = require "hs.application"
 local fnutils = require "hs.fnutils"
 local grid = require "hs.grid"
@@ -54,7 +55,6 @@ hs.hotkey.bind(tile, 'down', hs.grid.resizeWindowTaller) -- nach unten
 hs.hotkey.bind(tile, 'left', hs.grid.resizeWindowThinner) -- nach links 
 hs.hotkey.bind(tile, 'right', hs.grid.resizeWindowWider) -- nach rechts
 -- Show Grid
-hs.hotkey.bind(mash, 'g',     function() hs.grid.toggleShow() end)
 hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
 -- Snap focused window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
@@ -182,6 +182,7 @@ hs.hotkey.bind(mash, "4", function()
      f.h = max.h
      win:setFrame(f)
 end)
+
 -- Center
 hs.hotkey.bind(mash, "Space", function()
       local win = hs.window.focusedWindow()
@@ -257,6 +258,102 @@ expose_2 = hs.expose.new(nil,{includeOtherSpaces=false, includeNonVisible=false}
 -- then bind to a hotkey
 hs.hotkey.bind(hyper,'e','Expose',function()expose:toggleShow()end)
 hs.hotkey.bind(mash,'e','App Expose',function()expose_2:toggleShow()end)
+
+----------------------------------------------
+-- Layouts je App
+
+local layouts = {
+  {
+    name = {"PDF Expert"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 6
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 4 
+      frame.h = screen_frame.h
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"Path Finder"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = 0
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 3 
+      frame.h = (screen_frame.h / 4) * 1.5
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"Sublime Text"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 12) * 3
+      frame.y = screen_frame.w / 22
+      frame.h = (screen_frame.h / 4) * 3.5
+      frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
+    end
+  },
+}
+
+----------------------------------------------
+-- Layouts (Apps) Hotkey
+
+  hs.hotkey.bind(mash, "n", function()
+
+    local focusedWindow = hs.window.focusedWindow()
+    local app = focusedWindow:application()
+    if (app) then
+      applyLayout(layouts, app)
+    end
+    end)
+
+--------------------------------------------------------------------------------
+-- METHODS - Lassen!
+--------------------------------------------------------------------------------
+function applyLayout(layouts, app)
+  if (app) then
+    local appName = app:title()
+
+    for i, layout in ipairs(layouts) do
+      if (type(layout.name) == "table") then
+        for i, layAppName in ipairs(layout.name) do
+          if (layAppName == appName) then
+            hs.alert.show(appName)
+          
+            local wins = app:allWindows()
+            local counter = 1
+            for j, win in ipairs(wins) do
+              if (win:isVisible() and layout.func) then
+                layout.func(counter, win)
+                counter = counter + 1
+              end
+            end
+          end
+        end
+      elseif (type(layout.name) == "string") then
+        if (layout.name == appName) then
+          local wins = app:allWindows()
+          local counter = 1
+          for j, win in ipairs(wins) do
+            if (win:isVisible() and layout.func) then
+              layout.func(counter, win)
+              counter = counter + 1
+            end
+          end
+        end
+      end
+    end
+  end
+end
 
 -----------------------------------------------
 -- Reload config on write
