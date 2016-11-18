@@ -276,6 +276,19 @@ local layouts = {
       win:setFrame(frame)
     end
   },
+    {
+    name = {"Evernote"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 6
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 4 
+      frame.h = screen_frame.h
+      win:setFrame(frame)
+    end
+  },
   {
     name = {"Path Finder"},
     func = function(index, win)
@@ -299,6 +312,45 @@ local layouts = {
       frame.y = screen_frame.w / 22
       frame.h = (screen_frame.h / 4) * 3.5
       frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"iTerm2"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 12) * 3
+      frame.y = screen_frame.w / 30
+      frame.h = (screen_frame.h / 4) * 1.5
+      frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"Telegram"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = 0
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 2
+      frame.w = screen_frame.w / 6 
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"TickTick"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 6) * 4.5
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 3
+      frame.w = (screen_frame.w / 6) * 1.5 
       win:setFrame(frame)
     end
   },
