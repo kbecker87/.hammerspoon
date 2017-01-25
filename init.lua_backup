@@ -5,6 +5,7 @@ hs.window.animationDuration = 0
 -- Damit Fokus funktioniert: (?!?)
 require 'action'
 require 'profile'
+require 'cheatsheets'
 local application = require "hs.application"
 local fnutils = require "hs.fnutils"
 local grid = require "hs.grid"
@@ -42,7 +43,7 @@ local mash = {"cmd", "alt", "ctrl"}
 local move = {"cmd", "alt"}
 local tile = {"ctrl", "alt"}
 -- hide window shadows
--- hs.window.setShadows(false)
+hs.window.setShadows(false)
 ----------------------------------------------
 hs.hotkey.bind(move, 'left', hs.grid.pushWindowLeft)
 hs.hotkey.bind(move, 'right', hs.grid.pushWindowRight)
@@ -187,10 +188,10 @@ hs.hotkey.bind(mash, "Space", function()
       local win = hs.window.focusedWindow()
       local f = win:frame()
       local screen = win:screen()
-      local max = win:screen():frame()
+      local max = screen:frame()
  
-      f.x = max.x + (max.w / 8)
-      f.y = max.y + (max.h / 12)
+      f.x = max.w / 8
+      f.y = max.h / 12
       f.w = max.w * 0.75
       f.h = max.h * 0.85
       win:setFrame(f)
@@ -202,7 +203,7 @@ end)
 
 local function center(window)
 	   frame = window:screen():frame()
-	   frame.x = max.x + ((frame.w / 2) - (frame.w / 4))
+	   frame.x = (frame.w / 2) - (frame.w / 4)
 	   frame.y = (frame.h / 2) - (frame.h / 4)
 	   frame.w = screen.w / 2
 	   frame.h = screen.h / 2
@@ -211,7 +212,7 @@ end
 
 -- Float & Center
 
--- weg? hotkey.bind(mash, "f", function() tiling.toggleFloat(center) end)
+hotkey.bind(mash, "f", function() tiling.toggleFloat(center) end)
 
 -- Cycle Layouts
 
@@ -236,6 +237,29 @@ hs.hotkey.bind(hyper, 'Up', function() hs.window.focusedWindow():focusWindowNort
 hs.hotkey.bind(hyper, 'Down', function() hs.window.focusedWindow():focusWindowSouth() end)
 
 ----------------------------------------------
+-- Hammerspoon Expose
+
+hs.expose.ui.showTitles = false
+hs.expose.ui.backgroundColor = {0,0,0,0.5}
+hs.expose.ui.nonVisibleStripBackgroundColor = {0,0,0,0.5}
+hs.expose.ui.otherSpacesStripBackgroundColor = {0,0,0,0.5}
+hs.expose.ui.highlightColor = {0.31,0.31,0.31,1}
+hs.expose.ui.closeModeBackgroundColor = {0.7,0.1,0.1,0.5}
+hs.expose.ui.minimizeModeBackgroundColor = {0.1,0.2,0.3,0.5}
+hs.expose.ui.otherSpacesStripWidth = 0.1
+hs.expose.ui.nonVisibleStripWidth = 0.05
+hs.expose.ui.closeModeModifier = 'ctrl'
+-- set up your instance(s)
+expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no thumbnails
+expose_2 = hs.expose.new(nil,{includeOtherSpaces=false, includeNonVisible=false}) -- show windows for the current application
+-- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
+-- for your dozens of browser windows :)
+
+-- then bind to a hotkey
+hs.hotkey.bind(hyper,'e','Expose',function()expose:toggleShow()end)
+hs.hotkey.bind(mash,'e','App Expose',function()expose_2:toggleShow()end)
+
+----------------------------------------------
 -- Layouts je App
 
 local layouts = {
@@ -243,169 +267,156 @@ local layouts = {
     name = {"PDF Expert"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 6)
-      f.y = max.y
-      f.w = (max.w / 6) * 4 
-      f.h = max.h
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 6
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 4 
+      frame.h = screen_frame.h
+      win:setFrame(frame)
     end
   },
-  {
+    {
     name = {"Evernote"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 6)
-      f.y = max.y
-      f.w = (max.w / 6) * 4 
-      f.h = max.h
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 6
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 4 
+      frame.h = screen_frame.h
+      win:setFrame(frame)
     end
   },
   {
     name = {"TaskPaper"},
     func = function(index, win)
-      local f = win:frame()
-      local screen = win:screen()
-      local max = screen:frame()
-      f.x = max.x + (max.w / 4)
-      f.y = 0
-      f.h = max.h
-      f.w = (max.w / 6) * 3 
-      win:setFrame(f)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 12) * 3
+      frame.y = 0
+      frame.h = screen_frame.h
+      frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
     end
   },
-  {
+{
     name = {"Quiver"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 6)
-      f.y = max.y
-      f.w = (max.w / 6) * 4 
-      f.h = max.h
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 6
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 4 
+      frame.h = screen_frame.h
+      win:setFrame(frame)
     end
   },
   {
     name = {"Path Finder"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (0)
-      f.y = max.y
-      f.w = (max.w / 6) * 3 
-      f.h = (max.h / 4) * 1.5
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = 0
+      frame.y = screen_frame.y
+      frame.w = (screen_frame.w / 6) * 3 
+      frame.h = (screen_frame.h / 4) * 1.5
+      win:setFrame(frame)
     end
   },
-  {
-    name = {"Dictionary"},
-    func = function(index, win)
-    local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (0)
-      f.y = max.y
-      f.w = max.w / 4 
-      f.h = (max.h / 4) * 3
-      win:setFrame(f)
-    end
-  },  
   {
     name = {"Sublime Text"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 4)
-      f.y = 0
-      f.h = max.h
-      f.w = (max.w / 6) * 3 
-      win:setFrame(f)
-    end
-  },
-  {
-    name = {"Scrivener"},
-    func = function(index, win)
-    local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 4)
-      f.y = 0
-      f.h = max.h
-      f.w = (max.w / 6) * 3 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 4
+      frame.y = 0
+      frame.h = screen_frame.h
+      frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
     end
   },
   {
     name = {"nvALT"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 8)
-      f.y = 0
-      f.h = (max.h / 4) * 3
-      f.w = max.w / 4 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = screen_frame.w / 8
+      frame.y = 0
+      frame.h = (screen_frame.h / 4) * 3
+      frame.w = screen_frame.w / 4 
+      win:setFrame(frame)
     end
   },
   {
     name = {"iTerm2"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 4)
-      f.y = max.w / 30
-      f.h = (max.h / 4) * 1.5
-      f.w = (max.w / 6) * 3 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 12) * 3
+      frame.y = screen_frame.w / 30
+      frame.h = (screen_frame.h / 4) * 1.5
+      frame.w = (screen_frame.w / 6) * 3 
+      win:setFrame(frame)
     end
   },
   {
     name = {"Telegram"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (0)
-      f.y = max.y
-      f.h = (max.h / 4) * 2
-      f.w = max.w / 6 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = 0
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 2
+      frame.w = screen_frame.w / 6 
+      win:setFrame(frame)
     end
   },
   {
     name = {"WhatsApp"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (max.w / 2)
-      f.y = max.y
-      f.h = (max.h / 4) * 2
-      f.w = max.w / 2 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 6) * 3
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 2
+      frame.w = screen_frame.w / 2 
+      win:setFrame(frame)
+    end
+  },
+  {
+    name = {"TickTick"},
+    func = function(index, win)
+    local screen = win:screen()
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = (screen_frame.w / 6) * 4.5
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 3
+      frame.w = (screen_frame.w / 6) * 1.5 
+      win:setFrame(frame)
     end
   },
   {
     name = {"Reminders"},
     func = function(index, win)
     local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-      f.x = max.x + (0)
-      f.y = max.y
-      f.h = (max.h / 4) * 2
-      f.w = (max.w / 6) * 1 
-      win:setFrame(f)
+      local screen_frame = screen:frame()
+      local frame = win:frame()
+      frame.x = 0
+      frame.y = screen_frame.y
+      frame.h = (screen_frame.h / 4) * 2
+      frame.w = (screen_frame.w / 6) * 1 
+      win:setFrame(frame)
     end
   },
 }
@@ -413,16 +424,17 @@ local layouts = {
 ----------------------------------------------
 -- Layouts (Apps) Hotkey
 
-hs.hotkey.bind(mash, "n", function()
-  local focusedWindow = hs.window.focusedWindow()
-  local app = focusedWindow:application()
-  if (app) then
-    applyLayout(layouts, app)
-  end
-  end)
+  hs.hotkey.bind(mash, "n", function()
+
+    local focusedWindow = hs.window.focusedWindow()
+    local app = focusedWindow:application()
+    if (app) then
+      applyLayout(layouts, app)
+    end
+    end)
 
 --------------------------------------------------------------------------------
--- METHODS für die Layout-Funktion - Lassen!
+-- METHODS - Lassen!
 --------------------------------------------------------------------------------
 function applyLayout(layouts, app)
   if (app) then
@@ -478,7 +490,7 @@ function reloadConfig(files)
 end
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 
--- Manueller Reload:
+-- Well, sometimes auto-reload is not working, you know u.u
 hs.hotkey.bind(mash, "r", function()
   hs.reload()
 end)
