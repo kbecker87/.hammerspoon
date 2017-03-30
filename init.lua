@@ -1,10 +1,11 @@
 -----------------------------------------------
--- Hammerspoon Karl 9.9.16
+-- Hammerspoon 30.3.17
 -----------------------------------------------
 hs.window.animationDuration = 0
 -- Damit Fokus funktioniert: (?!?)
 require 'action'
 require 'profile'
+require 'launcher'
 local application = require "hs.application"
 local fnutils = require "hs.fnutils"
 local grid = require "hs.grid"
@@ -57,6 +58,28 @@ hs.hotkey.bind(tile, 'right', hs.grid.resizeWindowWider) -- nach rechts
 hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
 -- Snap focused window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
+--------------------------------------- 
+tabModMode = hs.hotkey.modal.new()
+
+tabModMode:bind({}, 's', function() hs.application.launchOrFocus("Safari") end)
+tabModMode:bind({}, 't', function() hs.application.launchOrFocus("Sublime Text") end)
+    
+tabMod = hs.hotkey.bind({}, "tab",
+  function()
+    tabModMode:enter()
+    tabModMode.triggered = false
+  end,
+  function()
+    tabModMode:exit()
+    if not tabModMode.triggered then
+      tabMod:disable()
+      hs.eventtap.keyStroke({}, "tab")
+      tabMod:enable()
+    end
+  end
+)       
+-- Apps launchen: 
+-- hs.hotkey.bind(tab, 's', function() hs.application.launchOrFocus("Safari") end)
 
 ---------------------------------------
 -- Window Tiles: mash + U,D (Right, Left, Up, Down)
@@ -127,7 +150,6 @@ hs.hotkey.bind(hyper, "Q", function()
     local f = win:frame()
     local screen = win:screen()
     local max = screen:frame()
-
     f.x = 0
     f.y = max.y
     f.w = (max.w / 6) * 4
@@ -319,6 +341,19 @@ local layouts = {
   },  
   {
     name = {"Sublime Text"},
+    func = function(index, win)
+    local screen = win:screen()
+      local max = screen:frame()
+      local f = win:frame()
+      f.x = max.x + (max.w / 4)
+      f.y = 0
+      f.h = max.h
+      f.w = (max.w / 6) * 3 
+      win:setFrame(f)
+    end
+  },
+  {
+    name = {"Typora"},
     func = function(index, win)
     local screen = win:screen()
       local max = screen:frame()
