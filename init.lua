@@ -59,9 +59,11 @@ hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
 -- Snap focused window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
 --------------------------------------- 
+-- Tab as Modifier
 tabModMode = hs.hotkey.modal.new()
 
 tabModMode:bind({}, 's', function() hs.application.launchOrFocus("Safari") end)
+tabModMode:bind({}, 'm', function() hs.application.launchOrFocus("Spark") end)
 tabModMode:bind({}, 't', function() hs.application.launchOrFocus("Sublime Text") end)
     
 tabMod = hs.hotkey.bind({}, "tab",
@@ -78,8 +80,6 @@ tabMod = hs.hotkey.bind({}, "tab",
     end
   end
 )       
--- Apps launchen: 
--- hs.hotkey.bind(tab, 's', function() hs.application.launchOrFocus("Safari") end)
 
 ---------------------------------------
 -- Window Tiles: mash + U,D (Right, Left, Up, Down)
