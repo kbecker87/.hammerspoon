@@ -1,40 +1,40 @@
 -----------------------------------------------
--- Hammerspoon 30.3.17
+-- Hammerspoon 12.8.17
 -----------------------------------------------
 hs.window.animationDuration = 0
 -- Damit Fokus funktioniert: (?!?)
 require 'action'
 require 'profile'
-require 'launcher'
+-- require 'launcher'
 local application = require "hs.application"
 local fnutils = require "hs.fnutils"
 local grid = require "hs.grid"
 local hotkey = require "hs.hotkey"
 local mjomatic = require "hs.mjomatic"
 local window = require "hs.window"
-local tiling = require "hs.tiling"
+--local tiling = require "hs.tiling"
 local main_monitor = "Color LCD"
 local second_monitor = "VX24A"
 ----------------------------------------------
 -- Configure Grid
 ----------------------------------------------
 hs.grid.setMargins({0, 0})
-hs.grid.setGrid('8x4','2560x1440')
-hs.grid.setGrid('8x4')
+-- hs.grid.setGrid('8x6','2560x1440')
+hs.grid.setGrid('8x8')
 hs.grid.ui.cellStrokeWidth = 0
 hs.grid.ui.cellColor = {0,0,0,0.25}
 hs.grid.ui.selectedColor = {0.925490,0.921569,0.921569,0.5}
 hs.grid.ui.highlightColor = {0.8,0.8,0,0.5}
-hs.grid.ui.textSize = 96
+hs.grid.ui.textSize = 56
 hs.grid.ui.fontName = 'TheSans'
 hs.grid.ui.highlightStrokeWidth = 0
-hs.grid.HINTS = {
-  {'1', '2', '3', '4', '5', '6', '7', '8'},
-  {'1', '2', '3', '4', '5', '6', '7', '8'},
-  {'Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I'},
-  {'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K'},
-  {'Y', 'X', 'C', 'V', 'B', 'N', 'M', ','}
-}
+-- hs.grid.HINTS = {
+--   {'1', '2', '3', '4', '5', '6', '7', '8'},
+--   {'1', '2', '3', '4', '5', '6', '7', '8'},
+--   {'Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I'},
+--   {'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K'},
+--   {'Y', 'X', 'C', 'V', 'B', 'N', 'M', ','}
+-- }
 ----------------------------------------------
 -- Modifier shortcuts
 ----------------------------------------------
@@ -59,27 +59,43 @@ hs.hotkey.bind(mash, 'down',     function() hs.grid.toggleShow() end)
 -- Snap focused window to grid
 hs.hotkey.bind(mash, ',',     function() grid.snap(window.focusedWindow()) end)
 --------------------------------------- 
--- Tab as Modifier
-tabModMode = hs.hotkey.modal.new()
+-- Exposé
+hs.expose.ui.showTitles = false
+hs.expose.ui.backgroundColor = {0,0,0,0.5}
+hs.expose.ui.nonVisibleStripBackgroundColor = {0,0,0,0.5}
+hs.expose.ui.otherSpacesStripBackgroundColor = {0,0,0,0.5}
+hs.expose.ui.highlightColor = {0.31,0.31,0.31,1}
+hs.expose.ui.closeModeBackgroundColor = {0.7,0.1,0.1,0.5}
+hs.expose.ui.minimizeModeBackgroundColor = {0.1,0.2,0.3,0.5}
+hs.expose.ui.otherSpacesStripWidth = 0.1
+hs.expose.ui.nonVisibleStripWidth = 0.05
+hs.expose.ui.thumbnailAlpha = 0.7
+hs.expose.ui.highlightThumbnailAlpha = 1
+expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no thumbnails
+hs.hotkey.bind(hyper,'e','Expose',function()expose:toggleShow()end)
+hs.hotkey.bind(mash,'e','App Expose',function()expose_2:toggleShow()end)
 
-tabModMode:bind({}, 's', function() hs.application.launchOrFocus("Safari") end)
-tabModMode:bind({}, 'm', function() hs.application.launchOrFocus("Spark") end)
-tabModMode:bind({}, 't', function() hs.application.launchOrFocus("Sublime Text") end)
-    
-tabMod = hs.hotkey.bind({}, "tab",
-  function()
-    tabModMode:enter()
-    tabModMode.triggered = false
-  end,
-  function()
-    tabModMode:exit()
-    if not tabModMode.triggered then
-      tabMod:disable()
-      hs.eventtap.keyStroke({}, "tab")
-      tabMod:enable()
-    end
-  end
-)       
+-- Tab as Modifier
+--tabModMode = hs.hotkey.modal.new()
+
+--tabModMode:bind({}, 's', function() hs.application.launchOrFocus("Safari") end)
+--tabModMode:bind({}, 'm', function() hs.application.launchOrFocus("Spark") end)
+--tabModMode:bind({}, 't', function() hs.application.launchOrFocus("Sublime Text") end)
+--    
+--tabMod = hs.hotkey.bind({}, "tab",
+--  function()
+--    tabModMode:enter()
+--    tabModMode.triggered = false
+--  end,
+--  function()
+--    tabModMode:exit()
+--    if not tabModMode.triggered then
+--      tabMod:disable()
+--      hs.eventtap.keyStroke({}, "tab")
+--      tabMod:enable()
+--    end
+--  end
+--)       
 
 ---------------------------------------
 -- Window Tiles: mash + U,D (Right, Left, Up, Down)
@@ -237,9 +253,9 @@ end
 
 -- Cycle Layouts
 
-hotkey.bind(mash, "l", function() tiling.cycleLayout() end)
-hotkey.bind(mash, "v", function() tiling.cycle(1) end)
-hotkey.bind(mash, "x", function() tiling.cycle(-1) end)	 
+--hotkey.bind(mash, "l", function() tiling.cycleLayout() end)
+--hotkey.bind(mash, "v", function() tiling.cycle(1) end)
+--hotkey.bind(mash, "x", function() tiling.cycle(-1) end)	 
 
 -----------------------------------------------
 -- Mash + . to show window hints
@@ -494,6 +510,10 @@ function applyLayout(layouts, app)
     end
   end
 end
+-------- Ignores:
+
+hs.window.filter.ignoreAlways['UÌbersicht Networking'] = true
+hs.window.filter.ignoreAlways['iTunes Networking'] = true
 
 -----------------------------------------------
 -- Reload config on write
